@@ -1,0 +1,125 @@
+//
+// Created by alxlee on 05.07.20.
+//
+
+#ifndef NOISE_SUPERPIXEL_H
+#define NOISE_SUPERPIXEL_H
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/ximgproc.hpp>
+#include <string>
+#include <random>
+#include <algorithm>
+#include <list>
+#include <map>
+#include <climits>
+
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/geometries.hpp>
+
+typedef int coordinate_type;
+typedef boost::geometry::model::d2::point_xy<coordinate_type> pointXY;
+typedef boost::geometry::model::point<int, 2, boost::geometry::cs::cartesian> point_t;
+
+#include "super_pixel_label_noise.h"
+
+typedef int LABEL ;
+
+
+namespace SuperPixel {
+
+    class superPixel {
+    public:
+        //default construction
+        superPixel()=default;
+
+        void setImage(cv::Mat& src){image=src;}
+
+        void setConfusionMatix(cv::Mat_<float> &confusion) { confusionMatrix = confusion; }
+
+        void setRandomRate(const float &rate) { randomRate = rate; }
+
+        void setUncertaintyThreshold(float &&threshold) { uncertaintyThreshold = threshold; }
+
+        void setSuperPixelSize(const int &superpixelsize) { superPixelSize = superpixelsize; }
+
+        void setLabelList(const std::list<LABEL> &label) { ls = label; }
+
+        void setUncertaintyMap(const cv::Mat &uncertaintyImage) { uncertainty = uncertaintyImage; }
+
+        void setPixelSelectionType(PixelSelectionType type) { selectionType = type; }
+
+        void setAddLabelNoiseType(NewLabelType type) { addLabelNoiseType = type; }
+
+        cv::Mat getAddedLabelNoiseImage() { return addedLabelNoiseImage; }
+
+        static cv::Mat convert_from_color(const cv::Mat &src);
+
+        static cv::Mat convert_to_color(const cv::Mat& src);
+
+    private:
+        PixelSelectionType selectionType;
+        NewLabelType addLabelNoiseType;
+        std::vector<std::vector<cv::Point>> selectedSuperPixel;
+        float randomRate;
+        float uncertaintyThreshold;
+        cv::Mat image;//index map
+        int superPixelSize;
+        std::list<LABEL> ls;
+        cv::Mat uncertainty;
+        cv::Mat addedLabelNoiseImage;
+        cv::Mat_<float> confusionMatrix;
+
+
+        int extract_Contour(
+                std::map<LABEL, std::vector<std::vector<cv::Point>>> &contours,
+                std::list<std::vector<cv::Vec4i>> &hierarchies);
+
+        void extract_Contour(std::vector<std::vector<cv::Point>>& contours);
+
+        static bool testPointInPolygon(const cv::Point &point,
+                                       const std::vector<cv::Point> &contour);
+
+        //how often the neighborhood 2nd traverse the whoe image and test
+        void calculateNeighborNumber(cv::Mat_<int> &NeighborMatrix);
+
+        void getSuperPixelImage(cv::Mat &labelImage,
+                                cv::Mat &mask,
+                                int &labelNumbers);
+
+        int getSuperPixelCoordinates(std::vector<std::vector<cv::Point>> &superPixels);
+
+        static bool testIntersectionSuperPixel(const std::map<LABEL, std::vector<std::vector<cv::Point>>> &contours,
+                                               const std::vector<cv::Point> &superPixels//coordinates
+        );
+        static bool testIntersectionSuperPixel(const std::vector<std::vector<cv::Point>> &contours,
+                                               const std::vector<cv::Point> &superPixels);
+
+        bool
+        testSuperPixelIntersectionReturnContour(const std::map<LABEL, std::vector<std::vector<cv::Point>>> &contours,
+                                                const std::vector<cv::Point> &superPixel,//coordinates
+                                                std::multimap<LABEL, std::vector<cv::Point>> &result//corresponding contours
+        );
+
+        bool
+        testSuperPixelIntersectionReturnContour(const std::vector<std::vector<cv::Point>> &contours,
+                                                const std::vector<cv::Point> &superPixels,
+                                                std::vector<std::vector<cv::Point>>   &result
+                                                            );
+         LABEL preprocessSuperPixel(const std::vector<cv::Point> &superpixel);
+
+
+    public:
+        void sampleSelection();
+
+        void addLabelNoise();
+
+        void superPixelNoise(SuperPixel::options option);
+
+        void saveColorImage(const std::string& filename);
+
+    };
+
+}
+#endif //NOISE_SUPERPIXEL_H

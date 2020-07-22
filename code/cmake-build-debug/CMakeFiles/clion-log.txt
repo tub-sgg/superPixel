@@ -1,0 +1,7 @@
+/snap/clion/114/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/HTCV-PJ-A/HTCV-PJ-A/code _modify"
+-- Found OpenMP_C: -fopenmp  
+-- Found OpenMP_CXX: -fopenmp  
+-- Found OpenMP: TRUE   
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/HTCV-PJ-A/HTCV-PJ-A/code _modify/cmake-build-debug
