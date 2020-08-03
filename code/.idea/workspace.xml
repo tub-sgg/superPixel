@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="noise" targetName="noise" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f2df17fd-8905-4c09-bf22-1efdf7386223" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/superPixel.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/superPixel.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/superPixel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/superPixel.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Class noise vs. attribute noise: A quantitative study.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Classification in the Presence of label noise.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Classification in the Presence of label noise.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Confident Learning: Estimating Uncertainty in Dataset Labels.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Effect of Training Class Label Noise on Classification&#10;Performances for Land Cover Mapping with Satellite&#10;Image Time Series.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Filtering mislabeled data for improving time series classification.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Filtering mislabeled data for improving time series classification.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Learning data-driven curriculum for very deep neural.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Learning data-driven curriculum for very deep neural.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Learning_from_Weak_and_Noisy_Labels_for_Semantic_S.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Learning_from_Weak_and_Noisy_Labels_for_Semantic_S.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Rectifying Pseudo Label Learning via Uncertainty Estimation.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Rectifying Pseudo Label Learning via Uncertainty Estimation.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Seed, Expand and Constrain: Three Principles.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/The Truth About Ground Truth: Label Noise in Human- Generated Reference Data.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/The sensitivity of mapping methods to reference&#10;data quality: Training supervised image classifications with&#10;imperfect reference data.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Training deep neural networks on noisy labels.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Training deep neural networks on noisy labels.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Using label noise robust logistic regression for automated updating of to-.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Using label noise robust logistic regression for automated updating of to-.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Xu_Learning_to_Segment_2015_CVPR_paper.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Xu_Learning_to_Segment_2015_CVPR_paper.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Zhang_Deep_Unsupervised_Saliency_CVPR_2018_paper.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Zhang_Deep_Unsupervised_Saliency_CVPR_2018_paper.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../literature/Zhang_Weakly_Supervised_Semantic_2015_CVPR_paper.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../literature/Zhang_Weakly_Supervised_Semantic_2015_CVPR_paper.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/1st_summary_HTCV_noise_team.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../report/1st_summary_HTCV_noise_team.pdf" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1cpY05hr9VizxI4UFkdOTNeQIdc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="noise" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="noise" TARGET_NAME="noise" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="noise" RUN_TARGET_NAME="noise">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f2df17fd-8905-4c09-bf22-1efdf7386223" name="Default Changelist" comment="" />
+      <created>1591226775489</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591226775489</updated>
+      <workItem from="1591226776668" duration="5147000" />
+      <workItem from="1591266525491" duration="491000" />
+      <workItem from="1591486399301" duration="3437000" />
+      <workItem from="1591559579139" duration="10192000" />
+      <workItem from="1591616819232" duration="6010000" />
+      <workItem from="1591827395325" duration="9361000" />
+      <workItem from="1592053952673" duration="14440000" />
+      <workItem from="1592230389735" duration="92000" />
+      <workItem from="1592231677610" duration="24669000" />
+      <workItem from="1592307740632" duration="25380000" />
+      <workItem from="1592397769523" duration="599000" />
+      <workItem from="1592519793738" duration="18406000" />
+      <workItem from="1592576997347" duration="20629000" />
+      <workItem from="1592647454354" duration="29985000" />
+      <workItem from="1593263122598" duration="745000" />
+      <workItem from="1595124798969" duration="25000" />
+      <workItem from="1595124853444" duration="50000" />
+      <workItem from="1595124976870" duration="4656000" />
+      <workItem from="1595185054225" duration="15066000" />
+      <workItem from="1595356563872" duration="32667000" />
+      <workItem from="1595392294086" duration="2619000" />
+      <workItem from="1595417234600" duration="10004000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="450" y="209" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591829017427">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="450" y="209" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1591829017427" />
+    <state x="725" y="300" width="526" height="504" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1595374985584">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="725" y="300" width="526" height="504" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1595374985584" />
+    <state width="485" height="506" key="DebuggerActiveHint" timestamp="1592613052910">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="485" height="506" key="DebuggerActiveHint/67.27.1853.1053@67.27.1853.1053" timestamp="1592613052910" />
+    <state x="775" y="309" width="426" height="486" key="FileChooserDialogImpl" timestamp="1592577023724">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="775" y="309" width="426" height="486" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1592577023724" />
+    <state width="1805" height="232" key="GridCell.Tab.0.bottom" timestamp="1595427977153">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="232" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1595427977153" />
+    <state width="1805" height="232" key="GridCell.Tab.0.center" timestamp="1595427977153">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="232" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1595427977153" />
+    <state width="1805" height="232" key="GridCell.Tab.0.left" timestamp="1595427977152">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="232" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1595427977152" />
+    <state width="1805" height="232" key="GridCell.Tab.0.right" timestamp="1595427977153">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="232" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1595427977153" />
+    <state width="1805" height="301" key="GridCell.Tab.1.bottom" timestamp="1595392121288">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="301" key="GridCell.Tab.1.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1595392121288" />
+    <state width="1805" height="301" key="GridCell.Tab.1.center" timestamp="1595392121288">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="301" key="GridCell.Tab.1.center/67.27.1853.1053@67.27.1853.1053" timestamp="1595392121288" />
+    <state width="1805" height="301" key="GridCell.Tab.1.left" timestamp="1595392121287">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="301" key="GridCell.Tab.1.left/67.27.1853.1053@67.27.1853.1053" timestamp="1595392121287" />
+    <state width="1805" height="301" key="GridCell.Tab.1.right" timestamp="1595392121288">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1805" height="301" key="GridCell.Tab.1.right/67.27.1853.1053@67.27.1853.1053" timestamp="1595392121288" />
+  </component>
+</project>
