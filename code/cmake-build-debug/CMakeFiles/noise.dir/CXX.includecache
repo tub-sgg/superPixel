@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/superPixel.h
+iostream
+-
+opencv2/opencv.hpp
+-
+opencv2/ximgproc.hpp
+-
+string
+-
+random
+-
+algorithm
+-
+list
+-
+map
+-
+climits
+-
+numeric
+-
+ctime
+-
+boost/geometry.hpp
+-
+boost/geometry/geometries/point_xy.hpp
+-
+boost/geometry/geometries/geometries.hpp
+-
+super_pixel_label_noise.h
+../include/super_pixel_label_noise.h
+
+../include/super_pixel_label_noise.h
+
+/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/src/main.cpp
+superPixel.h
+/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/src/superPixel.h
+

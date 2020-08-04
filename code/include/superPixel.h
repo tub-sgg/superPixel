@@ -43,8 +43,6 @@ namespace SuperPixel {
 
         void setRandomRate(const float &rate) { randomRate = rate; }
 
-        void setUncertaintyThreshold(float &&threshold) { uncertaintyThreshold = threshold; }
-
         void setSuperPixelSize(const int &superpixelsize) { superPixelSize = superpixelsize; }
 
         void setLabelList(const std::list<LABEL> &label) { ls = label; }
@@ -65,11 +63,12 @@ namespace SuperPixel {
 
         int getSuperixelSize()const {return superPixelSize;}
 
-        int getPixelNumberinContours()const;
-
-        int getPixelNumberinUncertaintyArea() const;
+//        int getPixelNumberinContours()const;
+//
+//        int getPixelNumberinUncertaintyArea() const;
 
         float getRndomRate()const{return randomRate;}
+
         void releaseAllsuperPixel(){ allsuperPixelCoordinates.clear();}
 
     private:
@@ -82,7 +81,6 @@ namespace SuperPixel {
         std::vector<std::vector<cv::Point>> selectedSuperPixel;
         std::vector<int> selectedSuperPixelIndex;
         float randomRate;
-        float uncertaintyThreshold;
         cv::Mat image;//index map
         int superPixelSize;
         std::list<LABEL> ls;
@@ -94,6 +92,9 @@ namespace SuperPixel {
         cv::Mat localSuperpixelNeighbormap;
         int width,  height;//superpixelimage
         std::vector<LABEL> localneighborMap;
+        cv::Mat contourMap;
+        cv::Mat labelMap;
+        std::vector<std::vector<int>> superpixelRelationMap;
     public:
 
 //        int extract_Contour(
@@ -102,21 +103,19 @@ namespace SuperPixel {
 
         void extract_Contour();
 
-        static bool testPointInPolygon(const cv::Point &point,
-                                       const std::vector<cv::Point> &contour);
+//        static bool testPointInPolygon(const cv::Point &point,
+//                                       const std::vector<cv::Point> &contour);
 
 
-        void getSuperPixelImage(cv::Mat &labelImage,
-                                cv::Mat &mask,
-                                int &labelNumbers);
+        void getSuperPixelImage(cv::Mat &mask,int &labelNumbers);
 
         void getSuperPixelCoordinates();
 
 //        static bool testIntersectionSuperPixel(const std::map<LABEL, std::vector<std::vector<cv::Point>>> &contours,
 //                                               const std::vector<cv::Point> &superPixels//coordinates
 //        );
-        static bool testIntersectionSuperPixel(const std::vector<cv::Point> &contour,
-                                               const std::vector<cv::Point> &superPixels);
+//        static bool testIntersectionSuperPixel(const std::vector<cv::Point> &contour,
+//                                               const std::vector<cv::Point> &superPixels);
 
 //        bool
 //        testSuperPixelIntersectionReturnContour(const std::map<LABEL, std::vector<std::vector<cv::Point>>> &contours,
@@ -136,12 +135,13 @@ namespace SuperPixel {
 
 
         static int miniColSuperPixel(std::vector<cv::Point>& superPixel);//find the col position
-        static int minRowwSuperPixel(std::vector<cv::Point>& superPixel);// find the label correspondingly
-        void createSuperPixelImage();
-        void calculateLocalNeighborMap();
+//        static int minRowwSuperPixel(std::vector<cv::Point>& superPixel);// find the label correspondingly
+//        void createSuperPixelImage();
+//        void calculateLocalNeighborMap();
         void getLocalNeighbourMap();
-
-        bool testsuperpixeltouchanothersuperpixel(int index,std::vector<int> &newvector);
+        void getBoundaryMap();
+//        bool testsuperpixeltouchanothersuperpixel(int index,std::vector<int> &newvector);
+        void calculateSuperpixelRelationshipMap();
 
     public:
         void sampleSelection(int N=100);//N define the size of superpixel required

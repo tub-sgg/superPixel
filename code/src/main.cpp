@@ -93,7 +93,7 @@ int main(int argc,char** argv){
         su.setFeatureImage(img);
 
         //set super pixel size
-        su.setSuperPixelSize(20);
+        su.setSuperPixelSize(3);
 
         //set the label list
         su.setLabelList(ls);
@@ -107,9 +107,6 @@ int main(int argc,char** argv){
         //set uncertainty map
         su.setUncertaintyMap(uncertainty);
 
-        //set Uncertainty Threshold
-        su.setUncertaintyThreshold(0.5);
-
         //calculate the number of superpixel
         int N;
         int singlePixelsNumber = (int) (img.size().width * img.size().height * su.getRndomRate());
@@ -121,6 +118,7 @@ int main(int argc,char** argv){
         su.calculateNeighborNumber();// calculate most coordinate matrix
         su.extract_Contour();//calcuate all the contour
         su.getLocalNeighbourMap();
+        su.getBoundaryMap();
         /****************************************************************
         ****************End *********************************************
         *****************************************************************
@@ -190,10 +188,13 @@ int main(int argc,char** argv){
         //set the out put file name
         std::string superPixelSize=std::to_string(su.getSuperixelSize());
         std::string noiseLevel =std::to_string(su.getRndomRate()*100);
+
         std::string outputname=std::to_string(idx)+"_"+superPixelSize+"_"+noiseLevel+"%";
+
         su.superPixelNoise(SuperPixel::RandomSelectionAllRelabel,outputname, N);
         su.superPixelNoise(SuperPixel::UncertaintySelectAllRelabel,outputname, N);
         su.superPixelNoise(SuperPixel::ObjectBorderSelectAllRelabel,outputname, N);
+
         //RELEASE THE CLASS
         su.releaseAllsuperPixel();
     }

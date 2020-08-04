@@ -66,7 +66,7 @@ namespace SuperPixel {
         auto it=std::min_element(vec.begin(),vec.end());
         return *it;
     }
-
+#if 0
     int superPixel::getPixelNumberinContours() const {
         std::vector<int> vec;
         for(const auto& con:contours)
@@ -116,7 +116,7 @@ namespace SuperPixel {
 
         return test;
     }
-#if 0
+
     int superPixel::minRowwSuperPixel(std::vector<cv::Point> &superPixel) {
         std::vector<int>  vec;
         for(const auto& pt: superPixel){
@@ -223,7 +223,7 @@ namespace SuperPixel {
 #endif
     void superPixel::getLocalNeighbourMap() {
         std::cout<<"start getLocalNeighbourMap***************"<<std::endl;
-        localneighborMap.resize(MaximumSuperPixelIndex+1,0);
+        localneighborMap.resize(MaximumSuperPixelIndex,0);
         //extend label map
         //extend 2 pixels larger
         cv::Mat ext_labelMap;
@@ -337,7 +337,7 @@ namespace SuperPixel {
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(img, contours, hierarchy, cv::RETR_LIST, cv::CHAIN_APPROX_NONE, cv::Point());
     }
-
+#if 0
     bool superPixel::testPointInPolygon(const cv::Point &point, const std::vector<cv::Point> &contour) {
             bool test=false;
             for(const auto& con:contour){
@@ -348,7 +348,7 @@ namespace SuperPixel {
             }
         return test;
     }
-
+#endif
     void superPixel::calculateNeighborNumber() {
         NeighborMatrix.create(cv::Size(ls.size(), ls.size()));
         NeighborMatrix.setTo(0);
@@ -375,14 +375,14 @@ namespace SuperPixel {
             }
     }
 
-    void superPixel::getSuperPixelImage(cv::Mat &labelImage, cv::Mat &mask, int &labelNumbers) {
+    void superPixel::getSuperPixelImage(cv::Mat &mask, int &labelNumbers) {
         cv::Ptr<cv::ximgproc::SuperpixelSLIC> slic = cv::ximgproc::createSuperpixelSLIC(image,
                                                                                         cv::ximgproc::SLIC,
                                                                                         superPixelSize);
         slic->iterate();
         slic->enforceLabelConnectivity();
         slic->getLabelContourMask(mask);
-        slic->getLabels(labelImage);
+        slic->getLabels(labelMap);
         labelNumbers = slic->getNumberOfSuperpixels();
     }
 
@@ -390,29 +390,88 @@ namespace SuperPixel {
         std::cout<<"*************************START GET SUPERPIXEL COOR SELECT***********"<<std::endl;
         clock_t startTime,endTime;
         startTime = clock();
-        cv::Mat labelImage;
         cv::Mat mask;
         int labelNumber;
-        getSuperPixelImage(labelImage, mask, labelNumber);
-        for (int index = 0; index <= labelNumber; index++) {
-            std::vector<cv::Point> point;
+        getSuperPixelImage( mask, labelNumber);
+        allsuperPixelCoordinates.resize(labelNumber);
 #pragma omp parallel for
-            for (int r = 0; r < labelImage.size().height; r++)
+        for (int r = 0; r < labelMap.size().height; r++)
 #pragma omp parallel for
-                for (int c = 0; c < labelImage.size().width; c++) {
-                    int value = labelImage.at<int>(r, c);
-                    if (index == value) {
-                        point.emplace_back(cv::Point(c, r));
-                    }
-                }
-            allsuperPixelCoordinates.emplace_back(point);
+                for (int c = 0; c < labelMap.size().width; c++){
+            int label=(int)labelMap.at<int>(r,c);
+            allsuperPixelCoordinates[label].push_back(cv::Point(c,r));
         }
+//        for (int index = 0; index <= labelNumber; index++) {
+//            std::vector<cv::Point> point;
+//#pragma omp parallel for
+//            for (int r = 0; r < labelImage.size().height; r++)
+//#pragma omp parallel for
+//                for (int c = 0; c < labelImage.size().width; c++) {
+//                    int value = labelImage.at<int>(r, c);
+//                    if (index == value) {
+//                        point.emplace_back(cv::Point(c, r));
+//                    }
+//                }
+//            allsuperPixelCoordinates.emplace_back(point);
+//        }
         MaximumSuperPixelIndex=labelNumber;
         endTime = clock();
         std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
         std::cout<<"*************************END GET SUPERPIXEL COOR SELECT***************"<<std::endl;
     }
 
+    void superPixel::getBoundaryMap() {
+        /***************start calculate contour map**************************/
+        clock_t startTime,endTime;
+        startTime = clock();
+        this->contourMap=cv::Mat::zeros(image.size(),image.type());
+        for(const auto&contour:contours){
+            for(const auto& pt:contour){
+                this->contourMap.at<uchar>(pt)=1;
+            }
+        }
+        endTime = clock();
+        std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
+        /***************end calculate contour map**************************/
+    }
+
+    void superPixel::calculateSuperpixelRelationshipMap() {
+        std::cout<<"*************************START SuperpixelRelationshipMap***********"<<std::endl;
+        clock_t startTime,endTime;
+        startTime = clock();
+        superpixelRelationMap.resize(MaximumSuperPixelIndex);
+        std::vector<std::set<int>> vec;
+        vec.resize(MaximumSuperPixelIndex);
+        cv::Mat ext_labelMap;
+        cv::copyMakeBorder(labelMap,ext_labelMap,1,1,1,1,cv::BORDER_REPLICATE);
+        for(auto r=1;r<ext_labelMap.size().height-1;r++)
+            for(auto c=1;c<ext_labelMap.size().width-1;c++){
+                cv::Point top=cv::Point(c,r-1);
+                cv::Point left=cv::Point(c-1,r);
+                cv::Point right=cv::Point(c+1,r);
+                cv::Point bot=cv::Point(c,r+1);
+                int t=ext_labelMap.at<int>(top);
+                int l=ext_labelMap.at<int>(left);
+                int rg=ext_labelMap.at<int>(right);
+                int b=ext_labelMap.at<int>(bot);
+                int loc=ext_labelMap.at<int>(r,c);
+                if(loc != t)  vec[loc].insert(t);
+                if(loc != l)  vec[loc].insert(l);
+                if(loc != rg) vec[loc].insert(rg);
+                if(loc != b)  vec[loc].insert(b);
+
+            }
+        for(auto index=0;index<MaximumSuperPixelIndex;index++){
+            auto it=vec[index].begin();
+            for(;it!=vec[index].end();it++){
+                superpixelRelationMap[index].push_back(*it);
+            }
+        }
+
+        endTime = clock();
+        std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
+        /***************end SuperpixelRelationshipMap**************************/
+    }
 #if 0
     bool superPixel::testIntersectionSuperPixel(const std::map<LABEL, std::vector<std::vector<cv::Point> > > &contours,
                                                 const std::vector<cv::Point> &superPixels) {
@@ -429,7 +488,7 @@ namespace SuperPixel {
         }
         return test;
     }
-#endif
+
     bool superPixel::testIntersectionSuperPixel(const std::vector<cv::Point> &contour,
                                                 const std::vector<cv::Point> &superPixels) {
         bool test=false;
@@ -443,7 +502,7 @@ namespace SuperPixel {
         }
         return test;
     }
-#if 0
+
     bool superPixel::testSuperPixelIntersectionReturnContour(
             const std::map<LABEL, std::vector<std::vector<cv::Point> > > &contours,
             const std::vector<cv::Point> &superPixel,
@@ -552,77 +611,133 @@ namespace SuperPixel {
                 startTime = clock();
                 selectedSuperPixelIndex.resize(N);
                 std::vector<int> allsuperPixelIntersectContour;
-#pragma omp parallel for
-                for(const auto& contour:contours)
-#pragma omp parallel for
-                    for (auto index=0;index<=MaximumSuperPixelIndex;index++) {
-                        if (testIntersectionSuperPixel(contour, allsuperPixelCoordinates[index])) {
-                            auto loc=index;
-                            allsuperPixelIntersectContour.emplace_back(loc);
+
+                std::vector<int> vec(MaximumSuperPixelIndex,0);
+                std::generate(vec.begin(), vec.end(), [n = 0]() mutable {return n++;});
+
+                for(const auto& superpixel:vec){
+                    for(const auto& pt:allsuperPixelCoordinates[superpixel]){
+                        int value=(int)contourMap.at<uchar>(pt);
+                        if(value==1){
+                            allsuperPixelIntersectContour.push_back(superpixel);
+                            break;
                         }
                     }
-                    int sizeAllsuperpixel=allsuperPixelIntersectContour.size();
-                    if(N<sizeAllsuperpixel){//random
-                        std::random_device RD;
-                        std::mt19937 GEN(RD());
-                        std::shuffle(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),GEN);
-                        auto it=allsuperPixelIntersectContour.begin();
-                        std::copy(it,it+N,selectedSuperPixelIndex.begin());
-                    }
-                    else if(N==sizeAllsuperpixel){
-                        auto it=allsuperPixelIntersectContour.begin();
-                        std::copy(it,it+N,selectedSuperPixelIndex.begin());
-                    }
-                    else{//find the super pixel close to the selected super pixels
-                        std::cout<<"the number of superpixel located on the boundary is not enough"<<std::endl;
-                        std::copy(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),
-                                  selectedSuperPixelIndex.begin());
+                }
+                int superpixelonboundarysize=allsuperPixelIntersectContour.size();
+                if(N<superpixelonboundarysize){
+                    std::random_device RD;
+                    std::mt19937 GEN(RD());
+                    std::shuffle(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),GEN);
+                    auto it=allsuperPixelIntersectContour.begin();
+                    std::copy(it,it+N,selectedSuperPixelIndex.begin());
+                }else if(N==superpixelonboundarysize){
+                    auto it=allsuperPixelIntersectContour.begin();
+                    std::copy(it,it+N,selectedSuperPixelIndex.begin());
+                }else{
+                    //find the super pixel close to the selected super pixels
+                    std::cout<<"the number of superpixel located on the boundary is not enough"<<std::endl;
 
-                        int rest=N-sizeAllsuperpixel;//need find rest super-pixel more
+                    calculateSuperpixelRelationshipMap();
+                    std::vector<int> newindexvector(allsuperPixelIntersectContour);
+                    do{
+                        std::vector<int> newvector;
+                        std::vector<int> oldvector;
+                        oldvector.clear();
+                        oldvector.insert(oldvector.begin(),allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end());
+                        //shuffle newindexvector
+                        auto it=newindexvector.begin();
+                        for(;it!=newindexvector.end();it++) {
+                            allsuperPixelIntersectContour.insert(allsuperPixelIntersectContour.end(),
+                                                                 superpixelRelationMap[*it].begin(),
+                                                                 superpixelRelationMap[*it].end());
+                            std::sort(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end());
+                            allsuperPixelIntersectContour.erase(std::unique(allsuperPixelIntersectContour.begin(),
+                                                                            allsuperPixelIntersectContour.end()),
+                                                                allsuperPixelIntersectContour.end());
 
 
-                        std::vector<int> allsuper(MaximumSuperPixelIndex);
-                        std::generate(allsuper.begin(), allsuper.end(), [n = 0]() mutable {return n++;});
+//                            auto a4=superpixelRelationMap[*it][0];
+                            newvector.insert(newvector.begin(), superpixelRelationMap[*it].begin(),
+                                             superpixelRelationMap[*it].end());
 
-                        std::vector<int> unselected;
-                        std::set_difference(allsuper.begin(), allsuper.end(), allsuperPixelIntersectContour.begin(), allsuperPixelIntersectContour.end(),
-                                            std::inserter(unselected, unselected.begin()));
+                        }
+
+                        auto a3=allsuperPixelIntersectContour.size();
+                        auto a4=oldvector.size();
+
+                        superpixelonboundarysize=N-allsuperPixelIntersectContour.size();
+                        if (superpixelonboundarysize == 0){
+                            std::copy(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),
+                                      selectedSuperPixelIndex.begin());
+                            break;
+                        }
+                        if(superpixelonboundarysize<0){
+                            selectedSuperPixelIndex.insert(selectedSuperPixelIndex.begin(),
+                                                           oldvector.begin(),oldvector.end());
+                            std::vector<int> rest;
+                            std::set_difference(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),
+                                                oldvector.begin(),oldvector.end(),std::inserter(rest,rest.begin()));
+                            auto a=allsuperPixelIntersectContour.size();
+                            auto a0=oldvector.size();
+                            auto a1=rest.size();
+                            std::random_device RD;
+                            std::mt19937 GEN(RD());
+                            std::shuffle(rest.begin(),rest.end(),GEN);
+                            auto it=rest.begin();
+                            auto len=N-oldvector.size();
+                            selectedSuperPixelIndex.insert(selectedSuperPixelIndex.end(),it,it+len);
+                            break;
+                        }
+
+                        newvector.clear();
+                        newindexvector.clear();
+                        newindexvector.resize(newvector.size());
+                        std::copy(newvector.begin(),newvector.end(),newindexvector.begin());
+
+                    }while(superpixelonboundarysize>0);
+#if 0
+                    int rest=N-superpixelonboundarysize;//need find rest super-pixel more
+
+                    std::vector<int> unselected;
+                    std::set_difference(vec.begin(), vec.end(), allsuperPixelIntersectContour.begin(), allsuperPixelIntersectContour.end(),
+                                        std::inserter(unselected, unselected.begin()));
 //                        std::for_each(unselected.begin(),unselected.end(),[](int b){
 //                            std::cout<<"new="<<b<<std::endl;
 //                        });
-                        std::vector<int> newindexvector(allsuperPixelIntersectContour.size());
-                        std::copy(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),newindexvector.begin());
+                    std::vector<int> newindexvector(allsuperPixelIntersectContour.size());
+                    std::copy(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),newindexvector.begin());
 
 //                        std::for_each(newindexvector.begin(),newindexvector.end(),[](int b){
 //                            std::cout<<"new="<<b<<std::endl;
 //                        });
 
-                        do{
-                            std::vector<int> newvector;
-                            ////
-                            auto it=unselected.begin();
-                            for(;it!=unselected.end();it++){
-                                if(testsuperpixeltouchanothersuperpixel(*it,newindexvector)){
-                                    selectedSuperPixelIndex.push_back(*it);
-                                    newvector.push_back(*it);
-                                    rest--;
-                                    if(rest<0)
-                                        break;
-                                }
-                            }////////
-                            std::vector<int> vec1;
-                            std::set_difference(unselected.begin(), unselected.end(), newvector.begin(), newvector.end(),
-                                                std::inserter(vec1, vec1.begin()));
-                            unselected.clear();
-                            unselected.resize(vec1.size());
-                            std::copy(vec1.begin(),vec1.end(),unselected.begin());
+                    do{
+                        std::vector<int> newvector;
+                        ////
+                        auto it=unselected.begin();
+                        for(;it!=unselected.end();it++){
+                            if(testsuperpixeltouchanothersuperpixel(*it,newindexvector)){
+                                selectedSuperPixelIndex.push_back(*it);
+                                newvector.push_back(*it);
+                                rest--;
+                                if(rest<0)
+                                    break;
+                            }
+                        }////////
+                        std::vector<int> vec1;
+                        std::set_difference(unselected.begin(), unselected.end(), newvector.begin(), newvector.end(),
+                                            std::inserter(vec1, vec1.begin()));
+                        unselected.clear();
+                        unselected.resize(vec1.size());
+                        std::copy(vec1.begin(),vec1.end(),unselected.begin());
 
-                            newindexvector.clear();
-                            newindexvector.resize(newvector.size());
-                            std::copy(newvector.begin(),newvector.end(),newindexvector.begin());
-                        }while(rest>0);
-                    }
-
+                        newindexvector.clear();
+                        newindexvector.resize(newvector.size());
+                        std::copy(newvector.begin(),newvector.end(),newindexvector.begin());
+                    }while(rest>0);
+#endif
+                }
                 endTime = clock();
                 std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
                 std::cout<<"*************************END BOUNDARY SELECT***************"<<std::endl;
@@ -707,8 +822,6 @@ namespace SuperPixel {
                     cv::minMaxLoc(row, nullptr, nullptr, nullptr,&maxLoc);
                     confusedMap.insert(std::make_pair(r,maxLoc.x));
                 }
-
-
 
                 if (confusedMap.empty())
                     return;
@@ -815,8 +928,6 @@ namespace SuperPixel {
 
                 addedLabelNoiseImage.create(image.size(), image.type());
                 image.copyTo(addedLabelNoiseImage);
-
-
 
                 int patch_size = 3;
                 int band_size = (patch_size-1)/2;
