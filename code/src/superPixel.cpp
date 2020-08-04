@@ -223,6 +223,8 @@ namespace SuperPixel {
 #endif
     void superPixel::getLocalNeighbourMap() {
         std::cout<<"start getLocalNeighbourMap***************"<<std::endl;
+        clock_t startTime,endTime;
+        startTime = clock();
         localneighborMap.resize(MaximumSuperPixelIndex,0);
         //extend label map
         //extend 2 pixels larger
@@ -233,14 +235,17 @@ namespace SuperPixel {
 
         //for each super pixel, calculate the neighbors
 
-        for(const auto& superpixel:allsuperPixelCoordinates){
-            LABEL super_label=preprocessSuperPixel(superpixel);
+        std::vector<int> allIndex(MaximumSuperPixelIndex,0);
+        std::generate(allIndex.begin(), allIndex.end(), [n = 0]() mutable {return n++;});
+#pragma omp parallel for
+        for(const auto& superpixel:allIndex){
+            LABEL super_label=preprocessSuperPixel(allsuperPixelCoordinates[superpixel]);
             std::vector<int> vec;
             vec.resize(ls.size(),0);
             cv::Mat tmp=ext_labelMap.clone();
-            for(const auto& pt:superpixel)
+            for(const auto& pt:allsuperPixelCoordinates[superpixel])
                 tmp.at<cv::Vec3b>(cv::Point(pt.x+1,pt.y+1))=cv::Vec3b(255,255,255);
-            for(const auto& pt:superpixel){
+            for(const auto& pt:allsuperPixelCoordinates[superpixel]){
                 cv::Point top=cv::Point(pt.x+1,pt.y);
                 cv::Point left=cv::Point(pt.x,pt.y+1);
                 cv::Point right=cv::Point(pt.x+2,pt.y+1);
@@ -262,15 +267,15 @@ namespace SuperPixel {
 //            std::for_each(vec.begin(),vec.end(),[&](int d){std::cout<<d;});
 //            std::cout<<"true="<<super_label<<",predict="<<predict<<std::endl;
 //            std::cout<<"all="<<allsuperPixelCoordinates.size()<<std::endl;
-            int loc=std::distance(allsuperPixelCoordinates.begin(),
-                                  std::find(allsuperPixelCoordinates.begin(),
-                                            allsuperPixelCoordinates.end(),superpixel));
+            int loc=superpixel;
 //            std::cout<<"loc="<<loc<<std::endl;
             if(*maxEle==0)
                 localneighborMap[loc]=super_label;
             else
                 localneighborMap[loc]=predict;
         }
+        endTime = clock();
+        std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
         std::cout<<"end getLocalNeighbourMap***************"<<std::endl;
 
     }
