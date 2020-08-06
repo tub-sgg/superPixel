@@ -5,9 +5,6 @@
 #include "superPixel.h"
 
 namespace SuperPixel {
-//onstruction
-
-
     cv::Mat superPixel::convert_from_color(const cv::Mat &src) {
         cv::Mat label_map = cv::Mat::zeros(src.size(), src.type());
         for (int i = 0; i < label_map.size().height; i++) {
@@ -237,7 +234,7 @@ namespace SuperPixel {
 
         std::vector<int> allIndex(MaximumSuperPixelIndex,0);
         std::generate(allIndex.begin(), allIndex.end(), [n = 0]() mutable {return n++;});
-#pragma omp parallel for
+
         for(const auto& superpixel:allIndex){
             LABEL super_label=preprocessSuperPixel(allsuperPixelCoordinates[superpixel]);
             std::vector<int> vec;
@@ -330,30 +327,16 @@ namespace SuperPixel {
     void superPixel::extract_Contour() {
         //convert 3 channel to 1 channel
         std::vector<cv::Mat> SrcMatpart(image.channels());
-//        cv::Mat img=convert_to_color(image);
-//        cv::split(img, SrcMatpart);
-//        cv::Mat img2=SrcMatpart[0];
+
         cv::Mat img;
         cv::cvtColor(convert_to_color(image),img,cv::COLOR_BGR2GRAY);
-//        cv::imshow("img",img);
-//        cv::waitKey(0);
+
         cv::Canny(img,img,20,50);
 
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(img, contours, hierarchy, cv::RETR_LIST, cv::CHAIN_APPROX_NONE, cv::Point());
     }
-#if 0
-    bool superPixel::testPointInPolygon(const cv::Point &point, const std::vector<cv::Point> &contour) {
-            bool test=false;
-            for(const auto& con:contour){
-                if(point==con){
-                    test=true;
-                    break;
-                }
-            }
-        return test;
-    }
-#endif
+
     void superPixel::calculateNeighborNumber() {
         NeighborMatrix.create(cv::Size(ls.size(), ls.size()));
         NeighborMatrix.setTo(0);
@@ -399,26 +382,12 @@ namespace SuperPixel {
         int labelNumber;
         getSuperPixelImage( mask, labelNumber);
         allsuperPixelCoordinates.resize(labelNumber);
-#pragma omp parallel for
         for (int r = 0; r < labelMap.size().height; r++)
-#pragma omp parallel for
-                for (int c = 0; c < labelMap.size().width; c++){
-            int label=(int)labelMap.at<int>(r,c);
-            allsuperPixelCoordinates[label].push_back(cv::Point(c,r));
-        }
-//        for (int index = 0; index <= labelNumber; index++) {
-//            std::vector<cv::Point> point;
-//#pragma omp parallel for
-//            for (int r = 0; r < labelImage.size().height; r++)
-//#pragma omp parallel for
-//                for (int c = 0; c < labelImage.size().width; c++) {
-//                    int value = labelImage.at<int>(r, c);
-//                    if (index == value) {
-//                        point.emplace_back(cv::Point(c, r));
-//                    }
-//                }
-//            allsuperPixelCoordinates.emplace_back(point);
-//        }
+            for (int c = 0; c < labelMap.size().width; c++){
+                int label=(int)labelMap.at<int>(r,c);
+                allsuperPixelCoordinates[label].push_back(cv::Point(c,r));
+            }
+
         MaximumSuperPixelIndex=labelNumber;
         endTime = clock();
         std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
@@ -560,13 +529,12 @@ namespace SuperPixel {
                 clock_t startTime,endTime;
                 startTime = clock();
 
-                unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-
                 std::vector<int> vec(MaximumSuperPixelIndex,0);
                 std::generate(vec.begin(), vec.end(), [n = 0]() mutable {return n++;});
 
-
-                std::shuffle(vec.begin(), vec.end(), std::default_random_engine(seed));
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::shuffle(vec.begin(), vec.end(), gen);
                 auto it = vec.begin();
                 std::copy(it,it+N,selectedSuperPixelIndex.begin());
 
@@ -667,10 +635,6 @@ namespace SuperPixel {
                                              superpixelRelationMap[*it].end());
 
                         }
-
-                        auto a3=allsuperPixelIntersectContour.size();
-                        auto a4=oldvector.size();
-
                         superpixelonboundarysize=N-allsuperPixelIntersectContour.size();
                         if (superpixelonboundarysize == 0){
                             std::copy(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),
@@ -683,15 +647,13 @@ namespace SuperPixel {
                             std::vector<int> rest;
                             std::set_difference(allsuperPixelIntersectContour.begin(),allsuperPixelIntersectContour.end(),
                                                 oldvector.begin(),oldvector.end(),std::inserter(rest,rest.begin()));
-                            auto a=allsuperPixelIntersectContour.size();
-                            auto a0=oldvector.size();
-                            auto a1=rest.size();
+
                             std::random_device RD;
                             std::mt19937 GEN(RD());
                             std::shuffle(rest.begin(),rest.end(),GEN);
-                            auto it=rest.begin();
+                            auto it1=rest.begin();
                             auto len=N-oldvector.size();
-                            selectedSuperPixelIndex.insert(selectedSuperPixelIndex.end(),it,it+len);
+                            selectedSuperPixelIndex.insert(selectedSuperPixelIndex.end(),it1,it1+len);
                             break;
                         }
 
@@ -769,14 +731,6 @@ namespace SuperPixel {
                 std::vector<LABEL> l;
                 for (auto it:ls)
                     l.push_back(it);
-
-
-
-//                addjustedSelectedSuperPixelIndex.insert(addjustedSelectedSuperPixelIndex.begin(),it,it+N);
-//
-//                std::cout<<"addjust size="<<addjustedSelectedSuperPixelIndex.size()<<std::endl;
-//                std::for_each(copy_selectedsuperpixelIndex.begin(),copy_selectedsuperpixelIndex.end(),
-//                              [](int i)->void {std::cout <<"relabel="<< i <<std::endl;});
 
                 for (auto const &sp:selectedSuperPixelIndex) {
                     std::random_device rd;
@@ -866,8 +820,6 @@ namespace SuperPixel {
                 LABEL relabel;
                 LABEL mostConfusedlabel1=point.x,mostConfusedlabel2=point.y;
 
-
-
                 for (const auto &superpixel:selectedSuperPixelIndex) {
                     LABEL l = preprocessSuperPixel(allsuperPixelCoordinates[superpixel]);
                     if (l == mostConfusedlabel1) {
@@ -897,25 +849,9 @@ namespace SuperPixel {
                 addedLabelNoiseImage.create(image.size(), image.type());
                 image.copyTo(addedLabelNoiseImage);
 
-//                for(const auto& superpixel:selectedSuperPixel) {
-//                    //find the corresponding position in the localneighbormap
-//                    auto pos = std::find(allsuperPixelCoordinates.begin(), allsuperPixelCoordinates.end(), superpixel);
-//                    int pos_num=pos-allsuperPixelCoordinates.begin();
-//                    int w,h;
-//                    h=pos_num/width;
-//                    w=pos_num%width;
-//                    LABEL l=localSuperpixelNeighbormap.at<uchar>(h,w);
-//                    for (const auto &pt:superpixel) {
-//                        addedLabelNoiseImage.at<cv::Vec3b>(pt) = cv::Vec3b(l,l,l);
-//                    }
-//                }
-
-//#pragma omp parallel for
                 for(const auto& superpixel:selectedSuperPixelIndex) {
                     int loc=superpixel;
-//                    std::cout<<"Relale loc="<<loc<<std::endl;
                     LABEL relabel=localneighborMap[loc];
-//#pragma omp parallel for
                     for (const auto &pt:allsuperPixelCoordinates[superpixel]) {
                         addedLabelNoiseImage.at<cv::Vec3b>(pt) = cv::Vec3b(relabel,relabel,relabel);
                     }
@@ -928,7 +864,7 @@ namespace SuperPixel {
             }
             case NearestNeighbour: {//nearest neighbor==  in Feature Space using knn
                 std::cout<<"*************************START NEAREST NEIGHBOUR RELABEL***************"<<std::endl;
-                clock_t startTime,endTime;
+                clock_t startTime,endTime,endtime1,endtime2,endtime3,endtime4;
                 startTime = clock();
 
                 addedLabelNoiseImage.create(image.size(), image.type());
@@ -939,50 +875,117 @@ namespace SuperPixel {
                 cv::Mat trainData;
                 cv::Mat trainLabels;
                 cv::Size size=image.size();
-                //convert 2dim vector to 1 dim vector
-                std::vector<cv::Point> allSuperPixelPoints;
-                for(const auto& superpixel:selectedSuperPixelIndex)
-                    for(const auto& pt:allsuperPixelCoordinates[superpixel])
-                    {
-                        allSuperPixelPoints.emplace_back(pt);
+
+                //crate selected map
+                cv::Mat_<int> selectedMap=cv::Mat_<int>::zeros(featureImg.size());
+                for(const auto superPixel:selectedSuperPixelIndex)
+                    for(const auto& pt:allsuperPixelCoordinates[superPixel]){
+                        selectedMap(pt)=1;
                     }
-                //generate a knn model and train the data without selected points
+
                 for(auto u=0;u<size.width;u++)
                     for(auto v=0;v<size.height;v++)
                     {
-                        //exclude all the  points in the selected points
-                        if(std::find(allSuperPixelPoints.begin(),allSuperPixelPoints.end(),cv::Point(u,v))!=allSuperPixelPoints.end())
-                            break;
-                        cv::Mat features_pixel;
-                        for(auto pr=0;pr<patch_size;pr++)
-                            for(auto pc=0;pc<patch_size;pc++){
-                                int x=u+pc-band_size;
-                                int y=v+pr-band_size;
-                                //limit the region
-                                if(x<0) x=0;
-                                if(y<0) y=0;
-                                if(x>size.width) x=size.width-1;
-                                if(y>size.height) y=size.height-1;
+                        cv::Point p=cv::Point(u,v);
+                        if(selectedMap(p)==0){
+                            cv::Mat features_pixel;
+                            for(auto pr=0;pr<patch_size;pr++)
+                                for(auto pc=0;pc<patch_size;pc++){
+                                    int x=u+pc-band_size;
+                                    int y=v+pr-band_size;
+                                    //limit the region
+                                    if(x<0) x=0;
+                                    if(y<0) y=0;
+                                    if(x>size.width) x=size.width-1;
+                                    if(y>size.height) y=size.height-1;
 
-                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[0]);
-                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[1]);
-                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[2]);
-                            }
-
-                        features_pixel.convertTo(features_pixel, CV_32F);
-                        trainData.push_back(features_pixel.reshape(1,1));
-                        trainLabels.push_back((LABEL) image.at<uchar>(v,u));
-
+                                    features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[0]);
+                                    features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[1]);
+                                    features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x,y))[2]);
+                                }
+                            features_pixel.convertTo(features_pixel, CV_32F);
+                            trainData.push_back(features_pixel.reshape(1,1));
+                            trainLabels.push_back((LABEL) image.at<uchar>(v,u));
+                        }
                     }
+                std::cout<<"*************************START KNN TRAIN ***************"<<std::endl;
+                endtime1=clock();
                 cv::Ptr<cv::ml::KNearest> knn=cv::ml::KNearest::create();
                 knn->train(trainData,cv::ml::ROW_SAMPLE,trainLabels);
+                endtime2=clock();
+                std::cout << "Totle Time : " <<(double)(endtime2 - endtime1) / CLOCKS_PER_SEC << "s" << std::endl;
+                std::cout<<"*************************END KNN TRAIN *****************"<<std::endl;
 
-                for(const auto& superpixel:selectedSuperPixelIndex) {
+                std::cout<<"*************************START CREATE NEAREST MAP ***************"<<std::endl;
+                endtime3=clock();
+                //create nearest map
+                cv::Mat_<float> nearestMap=cv::Mat_<float>::zeros(image.size());
+                int num = size.width*size.height;//2 dim2---> 1 dim for openmp
+#pragma omp parallel for
+                for (int i = 0;i<num;i++)
+                {
+                    int u=i%size.width;
+                    int v=i/size.width;
+                    cv::Point p=cv::Point(u,v);
+                    if(selectedMap(p)==1){
+                        cv::Mat features_pixel;
+                        for (auto pr = 0; pr < patch_size; pr++)
+                            for (auto pc = 0; pc < patch_size; pc++) {
+                                int x = u + pc - band_size;
+                                int y = v + pr - band_size;
+                                //limit the region
+                                if (x < 0) x = 0;
+                                if (y < 0) y = 0;
+                                if (x > size.width) x = size.width - 1;
+                                if (y > size.height) y = size.height - 1;
+
+                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x, y))[0]);
+                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x, y))[1]);
+                                features_pixel.push_back(featureImg.at<cv::Vec3b>(cv::Point(x, y))[2]);
+                                }
+                            features_pixel.convertTo(features_pixel, CV_32F);
+                            cv::Mat testData;
+                            testData.push_back(features_pixel.reshape(1, 1));
+                            cv::Mat predictedLabel;
+                            int K = 51;
+                            knn->findNearest(testData, K, predictedLabel);
+                            nearestMap(p)=predictedLabel.at<float>(0);
+                        }
+                    }
+
+                endtime4=clock();
+                std::cout << "Totle Time : " <<(double)(endtime4 - endtime3) / CLOCKS_PER_SEC << "s" << std::endl;
+                std::cout<<"*************************END CREATE NEAREST MAP ***************"<<std::endl;
+
+                //find the majority for each superpixel
+                for(const auto&superpixel:selectedSuperPixelIndex) {
+                    std::vector<int> labels;
+                    labels.resize(ls.size(),0);
+                    for (const auto &pt:allsuperPixelCoordinates[superpixel]) {
+                        LABEL l=(LABEL)nearestMap(pt);
+                        labels[l]+=1;
+                    }
+                    LABEL relabel=std::max_element(labels.begin(),labels.end())-labels.begin();
+                    LABEL truelabel=preprocessSuperPixel(allsuperPixelCoordinates[superpixel]);
+
+                    if(relabel==truelabel){
+                        auto it=std::max_element(labels.begin(),labels.end());
+                        *it=0;
+                        relabel=std::max_element(labels.begin(),labels.end())-labels.begin();
+                    }
+
+                    for(const auto& pt:allsuperPixelCoordinates[superpixel]){
+                        addedLabelNoiseImage.at<cv::Vec3b>(pt)=cv::Vec3b(relabel,relabel,relabel);
+                    }
+                }
+
+#if 0
+                for(auto k=0;k<selectedSuperPixelIndex.size();k++) {
                     //calculate the majority
                     std::vector<LABEL> labels;
-                    for (const auto &pt:allsuperPixelCoordinates[superpixel]) {
-                        int u = pt.x;
-                        int v = pt.y;
+                    for (auto j=0;j<allsuperPixelCoordinates[selectedSuperPixelIndex[k]].size();j++) {
+                        int u =  allsuperPixelCoordinates[selectedSuperPixelIndex[k]][j].x;
+                        int v =  allsuperPixelCoordinates[selectedSuperPixelIndex[k]][j].y;
                         cv::Mat features_pixel;
                         for (auto pr = 0; pr < patch_size; pr++)
                             for (auto pc = 0; pc < patch_size; pc++) {
@@ -1011,22 +1014,25 @@ namespace SuperPixel {
                     //compute the majority
                     std::vector<LABEL> l;
                     l.resize(ls.size());
+
                     for(const auto&label:ls){//count the number of each class
                         l[label]=std::count(labels.begin(),labels.end(),label);
                     }
                     LABEL relabel=std::max_element(l.begin(),l.end())-l.begin();
 
-                    LABEL truelabel=preprocessSuperPixel(allsuperPixelCoordinates[superpixel]);
+                    LABEL truelabel=preprocessSuperPixel(allsuperPixelCoordinates[selectedSuperPixelIndex[k]]);
                     //exclude the same label and different label
                     if(relabel==truelabel){
                         auto it=std::max_element(l.begin(),l.end());
                         *it=0;
                         relabel=std::max_element(l.begin(),l.end())-l.begin();
                     }
-                    for(const auto& pt:allsuperPixelCoordinates[superpixel]){
+
+                    for(const auto& pt:allsuperPixelCoordinates[selectedSuperPixelIndex[k]]){
                         addedLabelNoiseImage.at<cv::Vec3b>(pt)=cv::Vec3b(relabel,relabel,relabel);
                     }
                 }
+#endif
                 endTime = clock();
                 std::cout << "Totle Time : " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
                 std::cout<<"*************************END NEAREST NEIGHBOUR RELABEL***************"<<std::endl;
@@ -1057,6 +1063,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("RandomSelectRandomRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1073,6 +1081,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("RandomSelectMostNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1089,6 +1099,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("RandomSelectConfusionRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1106,6 +1118,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("RandomSelectNearestNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1119,6 +1133,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("RandomSelectLocalNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1136,6 +1152,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("UncertaintyAreaSelectRandomRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1152,6 +1170,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("UncertaintyAreaSelectConfusionRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1168,6 +1188,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("UncertaintyAreaSelectMostNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1184,6 +1206,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("UncertaintyAreaSelectNearestNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1200,6 +1224,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("UncertaintyAreaSelectLocalNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1216,6 +1242,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("ObjectBorderSelectRandomRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1232,6 +1260,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("ObjectBorderSelectConfusionRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1249,6 +1279,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("ObjectBorderSelectMostNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1265,6 +1297,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("ObjectBorderSelectNearestNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;
@@ -1281,6 +1315,8 @@ namespace SuperPixel {
                 sampleSelection(N);
                 //process the add label
                 addLabelNoise();
+                //save color image
+                saveColorImage("ObjectBorderSelectLocalNeighbourRelabel"+outputFilenameIndex);
                 //clear the data
                 selectedSuperPixelIndex.clear();
                 break;

@@ -131,17 +131,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named noise
+# Target rules for targets named superpixel
 
 # Build rule for target.
-noise: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 noise
-.PHONY : noise
+superpixel: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 superpixel
+.PHONY : superpixel
 
 # fast build rule for target.
-noise/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/build
-.PHONY : noise/fast
+superpixel/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/build
+.PHONY : superpixel/fast
 
 src/main.o: src/main.cpp.o
 
@@ -149,7 +149,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -158,7 +158,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -167,7 +167,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/superPixel.o: src/superPixel.cpp.o
@@ -176,7 +176,7 @@ src/superPixel.o: src/superPixel.cpp.o
 
 # target to build an object file
 src/superPixel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/superPixel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/superPixel.cpp.o
 .PHONY : src/superPixel.cpp.o
 
 src/superPixel.i: src/superPixel.cpp.i
@@ -185,7 +185,7 @@ src/superPixel.i: src/superPixel.cpp.i
 
 # target to preprocess a source file
 src/superPixel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/superPixel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/superPixel.cpp.i
 .PHONY : src/superPixel.cpp.i
 
 src/superPixel.s: src/superPixel.cpp.s
@@ -194,7 +194,7 @@ src/superPixel.s: src/superPixel.cpp.s
 
 # target to generate assembly for a file
 src/superPixel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/noise.dir/build.make CMakeFiles/noise.dir/src/superPixel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/superpixel.dir/build.make CMakeFiles/superpixel.dir/src/superPixel.cpp.s
 .PHONY : src/superPixel.cpp.s
 
 # Help Target
@@ -205,7 +205,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... noise"
+	@echo "... superpixel"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

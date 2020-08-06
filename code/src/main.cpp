@@ -59,7 +59,7 @@ int main(int argc,char** argv){
      * ****************************************************************************
      */
      //test
-//     auto test=cv::Rect(0,0,500,500);
+//     auto test=cv::Rect(0,0,1000,1000);
     for(auto idx:index) {
         //some predefined parameters
         //************read label map data*****************************
@@ -93,12 +93,12 @@ int main(int argc,char** argv){
         su.setFeatureImage(img);
 
         //set super pixel size
-        su.setSuperPixelSize(3);
+        su.setSuperPixelSize(100);
 
         //set the label list
         su.setLabelList(ls);
 
-        //select the random rate
+        //select the noise rate
         su.setRandomRate(0.10);
 
         //set the confusion matrix
@@ -191,10 +191,11 @@ int main(int argc,char** argv){
 
         std::string outputname=std::to_string(idx)+"_"+superPixelSize+"_"+noiseLevel+"%";
 
-        su.superPixelNoise(SuperPixel::RandomSelectionAllRelabel,outputname, N);
-        su.superPixelNoise(SuperPixel::UncertaintySelectAllRelabel,outputname, N);
-        su.superPixelNoise(SuperPixel::ObjectBorderSelectAllRelabel,outputname, N);
+//        su.superPixelNoise(SuperPixel::RandomSelectionAllRelabel,outputname, N);
+//        su.superPixelNoise(SuperPixel::UncertaintySelectAllRelabel,outputname, N);
+//        su.superPixelNoise(SuperPixel::ObjectBorderSelectAllRelabel,outputname, N);
 
+        su.superPixelNoise(SuperPixel::RandomSelectNearestNeighbourRelabel,outputname,N);
         //RELEASE THE CLASS
         su.releaseAllsuperPixel();
     }

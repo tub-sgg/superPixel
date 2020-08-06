@@ -1,3 +1,3 @@
 /home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/CMakeFiles/noise.dir
+/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/CMakeFiles/superpixel.dir

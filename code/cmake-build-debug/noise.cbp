@@ -37,8 +37,8 @@
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="noise">
-				<Option output="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin/noise" prefix_auto="0" extension_auto="0"/>
+			<Target title="superpixel">
+				<Option output="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin/superpixel" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -56,14 +56,14 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 noise"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 superpixel"/>
 					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="noise/fast">
-				<Option output="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin/noise" prefix_auto="0" extension_auto="0"/>
+			<Target title="superpixel/fast">
+				<Option output="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin/superpixel" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -81,7 +81,7 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 noise/fast"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 superpixel/fast"/>
 					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -89,10 +89,10 @@
 			</Target>
 		</Build>
 		<Unit filename="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/src/main.cpp">
-			<Option target="noise"/>
+			<Option target="superpixel"/>
 		</Unit>
 		<Unit filename="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/src/superPixel.cpp">
-			<Option target="noise"/>
+			<Option target="superpixel"/>
 		</Unit>
 		<Unit filename="/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>

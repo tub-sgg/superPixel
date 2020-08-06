@@ -15,16 +15,8 @@
 #include <climits>
 #include <numeric>
 #include <ctime>
+#include "omp.h"
 
-#if 0
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/geometries.hpp>
-
-typedef int coordinate_type;
-typedef boost::geometry::model::d2::point_xy<coordinate_type> pointXY;
-typedef boost::geometry::model::point<int, 2, boost::geometry::cs::cartesian> point_t;
-#endif
 #include "super_pixel_label_noise.h"
 
 typedef int LABEL ;

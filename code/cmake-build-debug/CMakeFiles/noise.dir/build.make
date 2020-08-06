@@ -161,6 +161,8 @@ noise_EXTERNAL_OBJECTS =
 ../bin/noise: /usr/local/lib/libopencv_photo.so.3.4.10
 ../bin/noise: /usr/local/lib/libopencv_imgproc.so.3.4.10
 ../bin/noise: /usr/local/lib/libopencv_core.so.3.4.10
+../bin/noise: /usr/lib/gcc/x86_64-linux-gnu/7/libgomp.so
+../bin/noise: /usr/lib/x86_64-linux-gnu/libpthread.so
 ../bin/noise: CMakeFiles/noise.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ../bin/noise"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/noise.dir/link.txt --verbose=$(VERBOSE)
