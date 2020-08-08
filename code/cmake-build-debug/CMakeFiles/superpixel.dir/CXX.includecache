@@ -31,12 +31,6 @@ ctime
 -
 omp.h
 ../include/omp.h
-boost/geometry.hpp
--
-boost/geometry/geometries/point_xy.hpp
--
-boost/geometry/geometries/geometries.hpp
--
 super_pixel_label_noise.h
 ../include/super_pixel_label_noise.h
 

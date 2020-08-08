@@ -17,6 +17,7 @@
 #include <ctime>
 #include "omp.h"
 
+
 #include "super_pixel_label_noise.h"
 
 typedef int LABEL ;
@@ -126,7 +127,7 @@ namespace SuperPixel {
         void calculateNeighborNumber();
 
 
-        static int miniColSuperPixel(std::vector<cv::Point>& superPixel);//find the col position
+//        static int miniColSuperPixel(std::vector<cv::Point>& superPixel);//find the col position
 //        static int minRowwSuperPixel(std::vector<cv::Point>& superPixel);// find the label correspondingly
 //        void createSuperPixelImage();
 //        void calculateLocalNeighborMap();

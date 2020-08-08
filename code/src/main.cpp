@@ -14,7 +14,7 @@ int main(int argc,char** argv){
     std::string labelpath="../data/label/";
     std::string uncertaintypath="../data/uncertaintyMap/";
     //set image imdex
-    std::vector<int> index={15,23,26,30};
+    std::vector<int> index={26};
     //set image name pre
     std::string prename="top_mosaic_09cm_area";
     //set confusion matrix
@@ -59,7 +59,7 @@ int main(int argc,char** argv){
      * ****************************************************************************
      */
      //test
-//     auto test=cv::Rect(0,0,1000,1000);
+//     auto test=cv::Rect(300,900,100,200);
     for(auto idx:index) {
         //some predefined parameters
         //************read label map data*****************************
@@ -93,13 +93,13 @@ int main(int argc,char** argv){
         su.setFeatureImage(img);
 
         //set super pixel size
-        su.setSuperPixelSize(100);
+        su.setSuperPixelSize(3);
 
         //set the label list
         su.setLabelList(ls);
 
         //select the noise rate
-        su.setRandomRate(0.10);
+        su.setRandomRate(0.1);
 
         //set the confusion matrix
         su.setConfusionMatix(confusionMatrix);
@@ -191,11 +191,15 @@ int main(int argc,char** argv){
 
         std::string outputname=std::to_string(idx)+"_"+superPixelSize+"_"+noiseLevel+"%";
 
-//        su.superPixelNoise(SuperPixel::RandomSelectionAllRelabel,outputname, N);
-//        su.superPixelNoise(SuperPixel::UncertaintySelectAllRelabel,outputname, N);
-//        su.superPixelNoise(SuperPixel::ObjectBorderSelectAllRelabel,outputname, N);
+        su.superPixelNoise(SuperPixel::RandomSelectionAllRelabel,outputname, N);
+        su.superPixelNoise(SuperPixel::UncertaintySelectAllRelabel,outputname, N);
+        su.superPixelNoise(SuperPixel::ObjectBorderSelectAllRelabel,outputname, N);
 
-        su.superPixelNoise(SuperPixel::RandomSelectNearestNeighbourRelabel,outputname,N);
+//        su.superPixelNoise(SuperPixel::RandomSelectConfusionRelabel,outputname,N);
+//        su.superPixelNoise(SuperPixel::UncertaintyAreaSelectNearestNeighbourRelabel,outputname,N);
+//        su.superPixelNoise(SuperPixel::ObjectBorderSelectNearestNeighbourRelabel,outputname,N);
+
+
         //RELEASE THE CLASS
         su.releaseAllsuperPixel();
     }
