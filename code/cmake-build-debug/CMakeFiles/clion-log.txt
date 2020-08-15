@@ -1,4 +1,0 @@
-/snap/clion/123/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise
--- Configuring done
--- Generating done
--- Build files have been written to: /home/alxlee/Documents/TU-Berlin_study/HTCV-PJ-A/code2_generate_superPixelNoise/cmake-build-debug
